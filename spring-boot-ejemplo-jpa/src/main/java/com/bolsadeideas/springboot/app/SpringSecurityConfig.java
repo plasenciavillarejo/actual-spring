@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.bolsadeideas.springboot.app.auth.handler.LoginSuccesHandler;
+
 import ch.qos.logback.core.encoder.Encoder;
 
 @Configuration
@@ -53,8 +55,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 		withUser(users.username("jose").password("12345").roles("USER"));	
 	}
 
-	/* Método para Implementar las Autorizaciones (http) de las rutas. Da seguridad a todas nuestras páginas.
-	   	Boton Derecho - Source - Override/Implements Methods -> Sobreescribimos el método configure(HttpSecurity)*/
+	/* 1.- Método para Implementar las Autorizaciones (http) de las rutas. Da seguridad a todas nuestras páginas.
+	   	  Boton Derecho - Source - Override/Implements Methods -> Sobreescribimos el método configure(HttpSecurity)
+	   2.- Inyectamos la clase LoginSuccesHandler que contiene el mensajeFlash cuando un usuario se ha logueado con éxito. */
+	
+	@Autowired
+	private LoginSuccesHandler succesHandler;
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -63,10 +69,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 		   2.- Vamos a incluir las rutas publicas que son de acceso a todo el mundo. antMatchers("/listar","/css/**") por último le permitimos a todos .permitAll()
 		   3.- Luego continuamos con las rutas privadas con .hasAnyRole() 
 		   4.- Para finalizar invocamos el método anyRequest().authenticated(); 
-		   5.- Implementamos nuestro  Login FormLogin(), lo permitimos para todos los usuarios
-		   			Como vamos a implementar nuestra pagina de login lo indicamos -> .formLogin().loginPage("/login")
-		   6.- Implementamos nuestro logout 
-		   7.- Agregamos nuestra página de error. -> .exceptionHandling().accessDeniedPage("error_403")*/
+		   5.- Implementamos nuestro  Login lo permitimos para todos los usuarios -> .formLogin()
+		   6.- Vamos a inyectar nuestra página LoginSuccesHandler para que nos indique un mensaje de bienvenida -> .successHandler()
+		   			Como vamos a implementar nuestra pagina de login lo indicamos -> .loginPage("/login").permitAll()
+		   7.- Implementamos nuestro logout -> .logout().permitAll()
+		   8.- Agregamos nuestra página de error. -> .exceptionHandling().accessDeniedPage("error_403")*/
 		
 		http.authorizeRequests().antMatchers("/","/css/**","/js/**","/images/**","/listar").permitAll()
 		.antMatchers("/editar/**").hasAnyRole("ADMIN")
@@ -74,7 +81,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 		.antMatchers("/eliminar/**").hasAnyRole("ADMIN")
 		.anyRequest().authenticated()
 		.and()
-			.formLogin().loginPage("/login")
+			.formLogin()
+			.successHandler(succesHandler)
+			.loginPage("/login")
 			.permitAll()
 		.and()
 		.logout().permitAll()
