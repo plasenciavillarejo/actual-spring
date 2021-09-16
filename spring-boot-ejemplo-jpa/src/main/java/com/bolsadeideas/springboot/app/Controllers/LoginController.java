@@ -16,6 +16,7 @@ public class LoginController {
 	   2.- Va a retornar la vista login.html
 	   3.- Se valida mediante el Objeto Principal si el usuario ya ha iniciado sesión, si es así, lo redirigimos a la página de inicio
 	   4.- Vamos a manejar los errores (Usuario no exista o error en la password) mediante @RequestParameter con el valor que no están enviado value="error"*/
+	
 	@GetMapping("/login")
 	public String login(@RequestParam(name = "error", required = false) String error,
 			@RequestParam(name = "logout", required = false) String logout,

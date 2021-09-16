@@ -25,3 +25,14 @@ INSERT INTO clientes (id, nombre, apellido, email, create_at) VALUES(24,'zxz','f
 INSERT INTO clientes (id, nombre, apellido, email, create_at) VALUES(25,'Peeterpe','ryuyweqt','pronq@gmail.com','2017-02-01');
 INSERT INTO clientes (id, nombre, apellido, email, create_at) VALUES(26,'Peptyuyte','Masfdsfdsriagr','pronq@gmail.com','2017-02-01');
 INSERT INTO clientes (id, nombre, apellido, email, create_at) VALUES(27,'kjljk','Marzvbvcxvzxciagr','pronq@gmail.com','2017-02-01');
+
+
+/* Inyectamos 2 usuario para hacer el login. */
+INSERT INTO users (username, password, enabled) VALUES ('jose','$2a$10$Rs431XSXPZc3vvX8vLFQCerQTpfitN4Q4HkQlyRaQslXJWh6tXvrq',1);
+INSERT INTO users (username, password, enabled) VALUES ('admin','$2a$10$Cr8senR9U/STePC/oCGfu.SVdaBnQ9bGXpymRbHICD5gTdD9hFV7y',1);
+
+/* Inyectamos los roles de los usuarios */
+INSERT INTO roles (user_id, rol) VALUES (1, 'ROLE_USER');
+INSERT INTO roles (user_id, rol) VALUES (2, 'ROLE_USER');
+INSERT INTO roles (user_id, rol) VALUES (2, 'ROLE_ADMIN');
+
