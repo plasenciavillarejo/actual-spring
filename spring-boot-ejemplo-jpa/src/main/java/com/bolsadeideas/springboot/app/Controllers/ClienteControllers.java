@@ -41,6 +41,12 @@ public class ClienteControllers {
 
 	private final Logger log = (Logger) LoggerFactory.getLogger(this.getClass());
 
+    @RequestMapping("/toIndex")
+    public String toIndex(){
+        System.out.println("Método del controlador");
+        return "index";
+    }
+	
 	/*
 	 * Listar de forma continuada, sin usar page render // @RequestMapping(value="/listar", method = RequestMethod.GET)
 	 
